@@ -1,6 +1,7 @@
 package com.example.httprequest.controller;
 
 import com.example.httprequest.model.AirlineModel;
+import com.example.httprequest.model.city.DataModel;
 import com.example.httprequest.service.CountryService;
 import com.example.httprequest.util.HttpRequest;
 import org.apache.logging.log4j.LogManager;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @RestController
@@ -49,38 +51,14 @@ public class Country {
         }
     }
     @GetMapping("/web_client_country")
-    public Flux<?> getCountry1() {
+    public Flux<DataModel> getCountry1() {
         try {
-            return countryService.getCities();
+            return countryService.getCitiesRetrieve();
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            return Flux.error(new Exception("server error"));
         }
     }
-//    @GetMapping("/web_client_country")
-//    public ResponseEntity<?> getCountry1() {
-//        try {
-//            String uri="https://countriesnow.space/api/v0.1/countries/population/cities";
-////            HttpClient httpClient = HttpClient.create()
-////                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-////                    .responseTimeout(Duration.ofMillis(5000))
-////                    .doOnConnected(conn ->
-////                            conn.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
-////                                    .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
-//
-//            WebClient client = (WebClient) WebClient
-//                    .get()
-//                    .uri(uri)
-//                            .retrieve().bodyToFlux(CityModel.class);
-////            logger.info(client);
-//
-////            client.get().retrieve().toBodilessEntity().block();
-//            return new ResponseEntity<>(client, HttpStatus.OK);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return new ResponseEntity<>("Error!, Please try again", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
 
     //Post data to an external url
